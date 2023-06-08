@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("./models/users");
+
 const userRoutes = require("./routes/user");
 var cors = require("cors");
 
@@ -16,18 +16,6 @@ mongoose
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
-
-//login
-app.post("/api/auth/signup", (req, res, next) => {
-  const user = new User({
-    email: req.body.email,
-    password: req.body.password,
-  });
-  user
-    .save()
-    .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-    .catch((error) => res.status(400).json({ error }));
-});
 
 app.use("/api/auth", userRoutes);
 
