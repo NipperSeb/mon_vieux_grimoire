@@ -1,7 +1,7 @@
 const express = require("express");
-
 const userRoutes = require("./routes/user");
 var cors = require("cors");
+const auth = require('../middleware/auth');
 
 const app = express();
 app.use(cors());
@@ -16,6 +16,8 @@ mongoose
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
+
+  
 
 app.use("/api/auth", userRoutes);
 
