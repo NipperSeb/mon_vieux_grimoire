@@ -1,11 +1,7 @@
 const express = require("express");
 const userRoutes = require("./routes/user");
-var cors = require("cors");
-const auth = require('../middleware/auth');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
+const bookRoutes = require("./routes/book");
+let cors = require("cors");
 
 //Connect mongoose
 const mongoose = require("mongoose");
@@ -17,8 +13,11 @@ mongoose
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
-  
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 app.use("/api/auth", userRoutes);
+app.use("/api/books", bookRoutes);
 
 module.exports = app;
