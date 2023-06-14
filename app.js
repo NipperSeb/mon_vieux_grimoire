@@ -1,6 +1,7 @@
 const express = require("express");
 const userRoutes = require("./routes/user");
 const bookRoutes = require("./routes/book");
+const path = require("path");
 let cors = require("cors");
 
 //Connect mongoose
@@ -16,6 +17,8 @@ mongoose
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use("/img", express.static(path.join(__dirname, "img")));
 
 app.use("/api/auth", userRoutes);
 app.use("/api/books", bookRoutes);
