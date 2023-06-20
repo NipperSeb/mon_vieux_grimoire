@@ -18,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+//fetch the image in the file
 app.use("/img", express.static(path.join(__dirname, "img")));
 
 app.use("/api/auth", userRoutes);

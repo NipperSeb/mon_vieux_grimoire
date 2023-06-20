@@ -11,6 +11,8 @@ router.post(
   uploads.compressImg,
   bookCtrl.createNewBook
 );
+router.post("/:id/rating", authentification, bookCtrl.ratingBook);
+
 router.get("/", bookCtrl.getAllBooks);
 router.get("/bestrating", bookCtrl.bestAverage);
 router.get("/:id", bookCtrl.getOneBook);

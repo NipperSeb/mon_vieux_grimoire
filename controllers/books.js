@@ -40,6 +40,7 @@ exports.getOneBook = (req, res, next) => {
 
 //Update one book
 exports.modifyBook = (req, res, next) => {
+  //if new image or not
   const bookObject = req.file
     ? {
         ...JSON.parse(req.body.book),
@@ -111,4 +112,48 @@ exports.bestAverage = (req, res, next) => {
     .limit(3)
     .then((book) => res.status(200).json(book))
     .catch((error) => res.status(404).json({ error }));
+};
+
+//change and update rating book
+exports.ratingBook = (req, res, next) => {
+  const url = req.url;
+  const urlId = url.split("/")[1];
+
+  const newUserId = req.body.userId;
+  const newGrade = req.body.rating;
+
+  const filter = { _id: urlId };
+
+  //create a new objet ratings in the db
+  const updatedData = {
+    userId: newUserId,
+    grade: newGrade,
+  };
+  if (0 <= req.body.rating <= 5) {
+    Book.findOneAndUpdate(
+      filter,
+      { $push: { ratings: updatedData } },
+      { new: true }
+    )
+
+      //calcul the average rating
+      .then((updateAverage) => {
+        const totalRatings = updateAverage.ratings.length;
+        const sumRating = updateAverage.ratings.reduce(
+          (acc, rating) => acc + rating.grade,
+          0
+        );
+        updateAverage.averageRating = sumRating / totalRatings;
+
+        return updateAverage.save();
+      })
+      .then((book) => {
+        res.status(200).json(book);
+      })
+      .catch((error) => res.status(400).json({ error }));
+  } else {
+    res
+      .status(400)
+      .json({ message: "La note doit être comprise entre 0 et 5" });
+  }
 };
